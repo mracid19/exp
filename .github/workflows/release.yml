@@ -11,19 +11,33 @@ jobs:
   build:
 
     runs-on: [windows-latest]
-
+   
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
       with:
-          fetch-depth: 0
+        fetch-depth: 0
           
-    - name: Setup .NET 8.0
-      uses: actions/setup-dotnet@v3
-      with:
-        dotnet-version: 8.0.x          
+    # - name: Setup .NET 8.0
+      # uses: actions/setup-dotnet@v3
+      # with:
+        # dotnet-version: 8.0.x
         
-    - name: Install GitVersion dotnet tool
-      run: dotnet tool install GitVersion.Tool --global
+    # - name: Install GitVersion.Tool
+      # run: dotnet tool install GitVersion.Tool --global
       
-    - name: Print Release version
-      run: dotnet GitVersion
+    # - name: Print Release version
+      # run: dotnet gitversion
+
+    - name: Show refs
+      run: |
+        echo ref_name: ${{github.ref_name}}
+        echo head_ref: ${{github.head_ref}}
+        echo base_ref: ${{github.base_ref}}
+    
+    - name: Rebase develop
+      run: |
+        git config user.name github-actions
+        git config user.email github-actions@github.com
+        git checkout develop
+        git rebase main
+        git push      

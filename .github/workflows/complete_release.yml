@@ -19,6 +19,7 @@ jobs:
         token: ${{secrets.ACTION_REPOSITORY_TOKEN}}
         
     - name: Set Release Tag
+      shell: pwsh
       run: |
         ${{github.head_ref}} -match 'releases/release-(\d+\.\d+\.\d+)'
         $release_version = $Matches[1]

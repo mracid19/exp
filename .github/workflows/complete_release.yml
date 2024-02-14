@@ -21,6 +21,8 @@ jobs:
     - name: Set Release Tag
       shell: pwsh
       run: |
+        git config user.name github-actions
+        git config user.email github-actions@github.com      
         "${{github.head_ref}}" -match 'releases/release-(\d+\.\d+\.\d+)'
         $release_version = $Matches[1]
         git tag -a "v$release_version" -m "Release $release_version"

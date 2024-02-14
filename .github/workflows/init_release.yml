@@ -24,8 +24,10 @@ jobs:
     - name: Init Release branch
       shell: pwsh
       run: |
+        git config user.name github-actions
+        git config user.email github-actions@github.com
         dotnet gitversion | ConvertFrom-Json -OutVariable gitversion_json
         $branch_name = "releases/release-$($gitversion_json.MajorMinorPatch)"
         git checkout -b $branch_name
         git commit --allow-empty -m "Init release-$($gitversion_json.MajorMinorPatch)"
-        git push
+        git push --set-upstream origin $branch_name

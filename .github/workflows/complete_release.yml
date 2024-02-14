@@ -17,24 +17,25 @@ jobs:
       with:
         fetch-depth: 0
         token: ${{secrets.ACTION_REPOSITORY_TOKEN}}
-          
-    # - name: Setup .NET 8.0
-      # uses: actions/setup-dotnet@v3
-      # with:
-        # dotnet-version: 8.0.x
         
-    # - name: Install GitVersion.Tool
-      # run: dotnet tool install GitVersion.Tool --global
-      
-    # - name: Print Release version
-      # run: dotnet gitversion
-
-    - name: Show refs
+    - name: Set Release Tag
       run: |
-        echo ref_name: ${{github.ref_name}}
-        echo head_ref: ${{github.head_ref}}
-        echo base_ref: ${{github.base_ref}}
-    
+        ${{github.head_ref}} -match 'releases/release-(\d+\.\d+\.\d+)'
+        $release_version = $Matches[1]
+        git tag -a "v$release_version" -m "Release $release_version"
+        git push origin "v$release_version"
+        
+    - name: Setup .NET 8.0
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 8.0.x
+        
+    - name: Install GitVersion.Tool
+      run: dotnet tool install GitVersion.Tool --global
+      
+    - name: Print Release version
+      run: dotnet gitversion
+
     - name: Rebase develop
       run: |
         git config user.name github-actions

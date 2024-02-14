@@ -21,7 +21,7 @@ jobs:
     - name: Set Release Tag
       shell: pwsh
       run: |
-        ${{github.head_ref}} -match 'releases/release-(\d+\.\d+\.\d+)'
+        "${{github.head_ref}}" -match 'releases/release-(\d+\.\d+\.\d+)'
         $release_version = $Matches[1]
         git tag -a "v$release_version" -m "Release $release_version"
         git push origin "v$release_version"
